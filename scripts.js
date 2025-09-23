@@ -168,12 +168,6 @@ function submitGuess() {
 }
 
 // TODO: Implement checkGuess function (the hardest part!)
-//function checkGuess(guess, tiles) {
-//     // Your code here!
-//     // Remember: handle duplicate letters correctly
-//     // Return the result array
-
-//}
 function checkGuess(guess, tiles) {
     logDebug(`🔍 Starting analysis for "${guess}"`, 'info');
     
