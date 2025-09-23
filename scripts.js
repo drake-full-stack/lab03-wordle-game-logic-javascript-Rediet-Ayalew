@@ -82,7 +82,7 @@ document.addEventListener("keydown", (event) => {
             deleteLetter();
         }
         else if(key==="ENTER"){
-        submitGuess(key);
+        submitGuess();
     }
     else if (key.length === 1 && key >= 'A' && key <='Z'){
         addLetter(key);
@@ -91,13 +91,16 @@ document.addEventListener("keydown", (event) => {
 
 // TODO: Implement addLetter function
 function addLetter(letter) {
-    logDebug('🎯 addLetter("${letter}") called', 'info');
+    logDebug(`🎯 addLetter("${letter}") called`, 'info');
 
     // If full, log error message and return early
     if (currentTile >=5){
-        logDebug('❌ cannot add more letters, row is full', 'error');
+        logDebug(`❌ cannot add more letters, row is full`, 'error');
+        currentRow++;
+        currentTile=0;
         return; // row is full
     }
+    
     const rowElement = rows[currentRow];
     const tiles =rowElement.querySelectorAll('.tile');
     const specificTile = tiles[currentTile];
@@ -105,17 +108,18 @@ function addLetter(letter) {
     specificTile.textContent= letter;
     specificTile.classList.add('filled');
     currentTile++;
-    logDebug('✅ Added letter "${letter}" to tile ${currentTile-1} in row $currentRow', 'success');
-    logDebug('💡 Current word: "${getCurrentWord()}"', 'info')  ;
+    logDebug(`✅ Added letter "${letter}" to tile ${currentTile-1} in row ${currentRow}`, 'success');
+    logDebug(`💡 Current word: "${getCurrentWord()}"`, 'info')  ;
 
 }
 
 // TODO: Implement deleteLetter function  
 function deleteLetter() {
-    logDebug('🎯 deleteLetter() called', 'info');
+    logDebug(`🎯 deleteLetter() called`, 'info');
     if (currentTile <=0){
-        logDebug('❌ cannot delete letter, row is empty', 'error')  
+        logDebug(`❌ cannot delete letter, row is empty`, 'error')  
         return;
+        
       }
       currentTile--;  
       const currentRowElement= rows[currentRow];
@@ -124,15 +128,44 @@ function deleteLetter() {
 
       specificTile.textContent='';
       specificTile.classList.remove('filled');
-      logDebug('✅ Deleted letter from tile ${currentTile} in row ${currentRow}', 'success');
-      logDebug('💡 Current word: "${getCurrentWord()}"', 'info');
+      logDebug(`✅ Deleted letter from tile ${currentTile} in row ${currentRow}`, 'success');
+      logDebug(`💡 Current word: "${getCurrentWord()}"`, 'info');
 
 }
 
 // TODO: Implement submitGuess function
-// function submitGuess() {
-//     // Your code here!
-// }
+function submitGuess() {
+    logDebug('🎯 submitGuess() called', 'info');
+    if(currentTile !==5) {
+        alert(`❌ cannot submit guess, row is not full`);
+        return;
+    }
+    const currentRowElement=rows[currentRow];
+    const tiles=currentRowElement.querySelectorAll('.tile');
+    let guess ='';
+    tiles.forEach(tile=>{
+        guess +=tile.textContent;
+    })
+    // Log the guess and target word for debugging
+    logDebug(`💡 Current guess: "${guess}"`, 'info')
+    logDebug(`💡 Target word: "${TARGET_WORD}"`, 'info');
+
+    // Call checkGuess function (to be implemented)
+    checkGuess(guess, tiles);
+    currentRow++;
+    currentTile=0;
+
+    if(guess === TARGET_WORD){
+        setTimeout(() => alert(`🎉 Congratulations! You won`), 500);
+        logDebug("🏆 Correct guess detected! Triggering win alert...", 'success');
+        gameOver=true;
+    } else if(currentRow>=6){
+        setTimeout(() => alert(`❌ Game Over! You lost!`), 500);
+        logDebug("💀 Maximum attempts reached! Triggering game over alert...", 'error');
+        gameOver=true;
+    }
+    
+}
 
 // TODO: Implement checkGuess function (the hardest part!)
 // function checkGuess(guess, tiles) {
