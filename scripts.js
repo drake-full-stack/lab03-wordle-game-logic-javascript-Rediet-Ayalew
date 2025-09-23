@@ -9,6 +9,11 @@ let gameBoard, rows, debugOutput;
 
 // ===== HELPER FUNCTIONS (PROVIDED) =====
 
+
+// /*Add, check, delete and submit letter_the 4 functions needed for lab03*/
+
+
+
 // Debug/Testing Functions
 function logDebug(message, type = 'info') {
     // Log to browser console
@@ -68,9 +73,21 @@ document.addEventListener('DOMContentLoaded', function() {
 // ===== YOUR CHALLENGE: IMPLEMENT THESE FUNCTIONS =====
 
 // TODO: Add keyboard event listener
-// document.addEventListener("keydown", (event) => {
-//     // Your code here!
-// });
+document.addEventListener("keydown", (event) => {
+    if (gameOver) {
+        return; // Ignore input if game is over
+        }
+        const key =event.key.toUpperCase(); // converts "a" to "A"
+           if(key ==="BACKSPACE"){
+            deleteLetter();
+        }
+        else if(key==="ENTER"){
+        submitGuess(key);
+    }
+    else if (key.length === 1 && key >= 'A' && key <='Z'){
+        addLetter(key);
+    }
+});
 
 // TODO: Implement addLetter function
 // function addLetter(letter) {
